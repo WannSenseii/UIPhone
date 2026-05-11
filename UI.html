@@ -1,284 +1,1237 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Virtual Phone UI</title>
+<title>OriginOS Virtual Phone</title>
 
 <style>
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
 body{
-    background:#111;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+background:#0a0a0a;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
 }
 
+/* PHONE */
+
 .phone{
-    width:340px;
-    height:700px;
-    background:#000;
-    border-radius:40px;
-    padding:12px;
-    box-shadow:0 0 40px rgba(0,0,0,0.8);
-    position:relative;
-    overflow:hidden;
+width:340px;
+height:700px;
+background:#000;
+border-radius:45px;
+padding:10px;
+
+box-shadow:
+0 0 90px rgba(0,0,0,.95),
+inset 0 0 0 2px rgba(255,255,255,.03);
+
+position:relative;
 }
 
 .screen{
-    width:100%;
-    height:100%;
-    border-radius:30px;
-    overflow:hidden;
-    position:relative;
-    background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop') center/cover;
+width:100%;
+height:100%;
+border-radius:35px;
+overflow:hidden;
+position:relative;
+
+background:
+url('https://www.iclarified.com/images/news/98545/469059/469059-640.avif');
+
+background-size:cover;
+background-position:center;
 }
+
+/* LIQUID GLASS */
+
+.liquid{
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.23),
+rgba(255,255,255,.05)
+);
+
+border:
+1px solid rgba(255,255,255,.14);
+
+backdrop-filter:
+blur(40px)
+saturate(180%);
+
+-webkit-backdrop-filter:
+blur(40px)
+saturate(180%);
+
+box-shadow:
+0 10px 35px rgba(0,0,0,.18),
+inset 0 1px 1px rgba(255,255,255,.08);
+}
+
+/* LOCKSCREEN */
+
+.lockscreen{
+position:absolute;
+inset:0;
+z-index:999999;
+
+background:
+url('https://www.iclarified.com/images/news/98545/469059/469059-640.avif');
+
+background-size:cover;
+background-position:center;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+color:white;
+
+transition:
+1s cubic-bezier(.16,1,.3,1);
+}
+
+.lockscreen.hide{
+transform:translateY(-100%);
+opacity:0;
+pointer-events:none;
+}
+
+.lock-time{
+font-size:84px;
+font-weight:500;
+}
+
+.lock-date{
+font-size:18px;
+opacity:.9;
+}
+
+.unlock-text{
+position:absolute;
+bottom:55px;
+
+font-size:15px;
+opacity:.85;
+
+animation:float 2s infinite ease-in-out;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-7px)}
+100%{transform:translateY(0)}
+}
+
+/* DYNAMIC ISLAND */
+
+.dynamic-island{
+position:absolute;
+top:10px;
+left:50%;
+transform:translateX(-50%);
+
+width:126px;
+height:34px;
+
+background:rgba(0,0,0,.95);
+
+border-radius:40px;
+
+z-index:99999;
+
+transition:
+width .6s cubic-bezier(.16,1,.3,1);
+}
+
+.dynamic-island.active{
+width:240px;
+}
+
+/* STATUS BAR */
 
 .statusbar{
-    width:100%;
-    padding:14px 18px;
-    display:flex;
-    justify-content:space-between;
-    color:white;
-    font-size:14px;
-    font-weight:bold;
-    backdrop-filter: blur(10px);
+width:100%;
+
+padding:18px 24px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+color:white;
+
+font-size:14px;
+font-weight:600;
+
+position:relative;
+z-index:9999;
 }
 
-.date{
-    color:white;
-    text-align:center;
-    margin-top:30px;
-    text-shadow:0 2px 10px rgba(0,0,0,0.7);
+.status-left{
+transition:
+transform .6s cubic-bezier(.16,1,.3,1),
+opacity .4s;
 }
 
-.date h1{
-    font-size:60px;
+.status-left.hide{
+transform:translateX(-120px);
+opacity:0;
 }
 
-.date p{
-    font-size:18px;
+/* MAIN CLOCK */
+
+.clock{
+margin-top:60px;
+text-align:center;
+color:white;
 }
+
+.clock h1{
+font-size:72px;
+font-weight:500;
+}
+
+.clock p{
+font-size:18px;
+}
+
+/* APPS */
 
 .apps{
-    position:absolute;
-    bottom:100px;
-    width:100%;
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:20px;
-    padding:20px;
+position:absolute;
+bottom:110px;
+
+width:100%;
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+
+gap:18px;
+padding:18px;
 }
 
 .app{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    color:white;
-    cursor:pointer;
-    transition:0.2s;
+display:flex;
+flex-direction:column;
+align-items:center;
+
+color:white;
+cursor:pointer;
 }
 
-.app:hover{
-    transform:scale(1.08);
+.app img{
+width:54px;
+height:54px;
+
+border-radius:16px;
+
+object-fit:cover;
+
+margin-bottom:6px;
+
+transition:.2s;
 }
 
-.icon{
-    width:58px;
-    height:58px;
-    border-radius:18px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:26px;
-    margin-bottom:6px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.4);
+.app img:active{
+transform:scale(.84);
 }
 
-.chrome{background:#ffffff;}
-.music{background:#ff3b30;}
-.gallery{background:#8e44ff;}
-.settings{background:#555;}
+.app span{
+font-size:12px;
+}
+
+/* DOCK */
 
 .dock{
-    position:absolute;
-    bottom:18px;
-    left:50%;
-    transform:translateX(-50%);
-    width:90%;
-    height:70px;
-    background:rgba(255,255,255,0.12);
-    backdrop-filter:blur(15px);
-    border-radius:24px;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
+position:absolute;
+
+bottom:18px;
+left:50%;
+
+transform:translateX(-50%);
+
+width:90%;
+height:72px;
+
+border-radius:30px;
 }
 
-.home-indicator{
-    position:absolute;
-    bottom:5px;
-    left:50%;
-    transform:translateX(-50%);
-    width:120px;
-    height:5px;
-    background:white;
-    border-radius:20px;
-    opacity:0.8;
+.dock-inner{
+width:100%;
+height:100%;
+
+display:flex;
+justify-content:space-around;
+align-items:center;
 }
+
+.dock img{
+width:50px;
+height:50px;
+border-radius:16px;
+}
+
+.homebar{
+width:120px;
+height:5px;
+
+background:white;
+
+border-radius:50px;
+
+position:absolute;
+
+bottom:5px;
+left:50%;
+
+transform:translateX(-50%);
+}
+
+/* CONTROL CENTER */
+
+.control-center{
+position:absolute;
+inset:0;
+
+z-index:999999;
+
+padding:82px 18px 20px;
+
+opacity:0;
+pointer-events:none;
+
+transform:
+translateY(-100px)
+scale(1.08);
+
+transition:
+.75s cubic-bezier(.16,1,.3,1);
+}
+
+.control-center.show{
+opacity:1;
+pointer-events:auto;
+
+transform:
+translateY(0)
+scale(1);
+}
+
+.cc-panel{
+width:100%;
+height:100%;
+
+border-radius:40px;
+
+padding:22px;
+}
+
+.cc-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+}
+
+.cc-toggle{
+height:100px;
+
+border-radius:28px;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+color:white;
+
+font-size:30px;
+
+cursor:pointer;
+
+transition:.25s;
+}
+
+.cc-toggle.active{
+background:
+linear-gradient(
+135deg,
+rgba(0,145,255,.95),
+rgba(0,210,255,.82)
+);
+}
+
+.cc-toggle span{
+font-size:14px;
+margin-top:8px;
+}
+
+.cc-slider{
+margin-top:18px;
+
+padding:22px;
+
+border-radius:28px;
+
+color:white;
+}
+
+.cc-slider input{
+width:100%;
+margin-top:14px;
+}
+
+.cc-music{
+margin-top:18px;
+
+display:flex;
+align-items:center;
+
+gap:14px;
+
+padding:18px;
+
+border-radius:28px;
+
+color:white;
+}
+
+.cc-music img{
+width:72px;
+height:72px;
+
+border-radius:22px;
+}
+
+/* APP WINDOW */
 
 .app-window{
-    position:absolute;
-    inset:0;
-    background:white;
-    z-index:20;
-    transform:scale(0.2);
-    opacity:0;
-    border-radius:40px;
-    transition:
-        transform 0.35s cubic-bezier(.2,.8,.2,1),
-        opacity 0.35s;
-    pointer-events:none;
+position:absolute;
+inset:0;
+
+background:
+linear-gradient(
+to bottom,
+#eef3ff,
+#eef2ff
+);
+
+display:none;
+overflow:auto;
+
+z-index:999;
 }
 
-.app-window.active{
-    transform:scale(1);
-    opacity:1;
-    border-radius:0;
-    pointer-events:auto;
+.origin-header{
+position:sticky;
+top:0;
+
+padding:65px 20px 20px;
+
+display:flex;
+align-items:center;
+
+gap:15px;
+
+z-index:99;
 }
 
-.app-header{
-    height:70px;
-    background:#f1f1f1;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 20px;
-    font-weight:bold;
-}
+.backBtn{
+width:42px;
+height:42px;
 
-.close-btn{
-    background:#ff3b30;
-    color:white;
-    border:none;
-    padding:8px 14px;
-    border-radius:12px;
-    cursor:pointer;
+border:none;
+
+border-radius:50%;
+
+font-size:20px;
+
+cursor:pointer;
 }
 
 .app-content{
-    padding:30px;
-    font-size:20px;
+padding:20px;
+}
+
+.glass-card{
+padding:24px;
+
+border-radius:34px;
+
+margin-bottom:20px;
+}
+
+.origin-card{
+padding:18px 22px;
+
+border-radius:24px;
+
+margin-top:15px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.album-cover{
+width:220px;
+height:220px;
+
+border-radius:32px;
+
+object-fit:cover;
+
+display:block;
+margin:auto;
+}
+
+.song-title{
+text-align:center;
+margin-top:20px;
+font-size:32px;
+}
+
+.artist{
+text-align:center;
+opacity:.6;
+margin-bottom:20px;
+}
+
+.device-img{
+width:100%;
+height:220px;
+
+border-radius:30px;
+
+object-fit:cover;
+}
+
+iframe{
+border-radius:24px;
+}
+
+/* TIMER */
+
+.timerBtn{
+flex:1;
+
+height:54px;
+
+border:none;
+
+border-radius:22px;
+
+color:white;
+
+cursor:pointer;
+
+background:
+linear-gradient(
+135deg,
+rgba(0,145,255,.95),
+rgba(130,90,255,.9)
+);
+}
+
+.time-input{
+width:100%;
+height:55px;
+
+border:none;
+
+border-radius:22px;
+
+padding:0 18px;
+
+margin-top:18px;
+
+font-size:16px;
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="phone">
-    <div class="screen">
 
-        <div class="statusbar">
-            <span id="time">12:00</span>
-            <span>📶 🔋</span>
-        </div>
+<div class="screen">
 
-        <div class="date">
-            <h1 id="clockBig">12:00</h1>
-            <p id="dateText">Senin, 11 Mei</p>
-        </div>
+<!-- LOCKSCREEN -->
 
-        <div class="apps">
+<div class="lockscreen" id="lockscreen">
 
-            <div class="app" onclick="openApp('Chrome')">
-                <div class="icon chrome">🌐</div>
-                <span>Chrome</span>
-            </div>
+<div class="lock-time" id="lockTime">
+12:00
+</div>
 
-            <div class="app" onclick="openApp('Music')">
-                <div class="icon music">🎵</div>
-                <span>Music</span>
-            </div>
+<div class="lock-date" id="lockDate">
+Monday, May 11
+</div>
 
-            <div class="app" onclick="openApp('Gallery')">
-                <div class="icon gallery">🖼️</div>
-                <span>Gallery</span>
-            </div>
+<div class="unlock-text">
+Swipe up to unlock
+</div>
 
-            <div class="app" onclick="openApp('Settings')">
-                <div class="icon settings">⚙️</div>
-                <span>Settings</span>
-            </div>
+</div>
 
-        </div>
+<!-- DYNAMIC ISLAND -->
 
-        <div class="dock">
-            <div class="icon chrome">📞</div>
-            <div class="icon music">💬</div>
-            <div class="icon gallery">📷</div>
-            <div class="icon settings">🎮</div>
-        </div>
+<div class="dynamic-island" id="island"></div>
 
-        <div class="home-indicator"></div>
+<!-- STATUS BAR -->
 
-        <div class="app-window" id="appWindow">
-            <div class="app-header">
-                <span id="appTitle">App</span>
-                <button class="close-btn" onclick="closeApp()">Close</button>
-            </div>
+<div class="statusbar">
 
-            <div class="app-content">
-                Ini tampilan aplikasi virtual 📱
-            </div>
-        </div>
+<div class="status-left" id="statusLeft">
+<span id="smallClock">12:00</span>
+</div>
 
-    </div>
+<div>
+📶 🔋
+</div>
+
+</div>
+
+<!-- CONTROL CENTER -->
+
+<div class="control-center" id="controlCenter">
+
+<div class="cc-panel liquid">
+
+<h2 style="color:white;margin-bottom:20px;">
+Control Center
+</h2>
+
+<div class="cc-grid">
+
+<div
+class="cc-toggle liquid active"
+id="wifiBtn"
+onclick="toggleCC('wifiBtn')">
+
+📶
+<span>Wi-Fi</span>
+
+</div>
+
+<div
+class="cc-toggle liquid active"
+id="dataBtn"
+onclick="toggleCC('dataBtn')">
+
+🛜
+<span>Data</span>
+
+</div>
+
+<div class="cc-toggle liquid">
+🎧
+<span>Bluetooth</span>
+</div>
+
+<div class="cc-toggle liquid">
+🌙
+<span>Focus</span>
+</div>
+
+</div>
+
+<div class="cc-slider liquid">
+
+<p>Brightness</p>
+
+<input type="range" value="75">
+
+</div>
+
+<div class="cc-slider liquid">
+
+<p>Volume</p>
+
+<input type="range" value="55">
+
+</div>
+
+<div class="cc-music liquid">
+
+<img src="https://cdn-icons-png.freepik.com/512/8377/8377243.png">
+
+<div>
+<h3>Blinding Light</h3>
+<p>The Weeknd</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CLOCK -->
+
+<div class="clock">
+
+<h1 id="bigClock">
+12:00
+</h1>
+
+<p id="dateText">
+Monday, May 11
+</p>
+
+</div>
+
+<!-- APPS -->
+
+<div class="apps">
+
+<div class="app" onclick="openApp('chromeApp',event)">
+
+<img src="https://play-lh.googleusercontent.com/MGwlmZ9iUgnJQKGCWdstBDltLDJEgAJUB-2NKaoLJeCz_V1U2R22P8BFHsJjeJDasIw=w240-h480-rw">
+
+<span>Chrome</span>
+
+</div>
+
+<div class="app" onclick="openApp('musicApp',event)">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/3840px-Spotify_logo_without_text.svg.png">
+
+<span>Music</span>
+
+</div>
+
+<div class="app" onclick="openApp('settingsApp',event)">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Settings_%28iOS%29.png">
+
+<span>Settings</span>
+
+</div>
+
+<div class="app" onclick="openApp('clockApp',event)">
+
+<img src="https://www.macworld.com/wp-content/uploads/2025/02/mac911-alarm-clock-icon.png">
+
+<span>Clock</span>
+
+</div>
+
+</div>
+
+<!-- DOCK -->
+
+<div class="dock liquid">
+
+<div class="dock-inner">
+
+<img src="https://play-lh.googleusercontent.com/MGwlmZ9iUgnJQKGCWdstBDltLDJEgAJUB-2NKaoLJeCz_V1U2R22P8BFHsJjeJDasIw=w240-h480-rw">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/3840px-Spotify_logo_without_text.svg.png">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Settings_%28iOS%29.png">
+
+</div>
+
+</div>
+
+<div class="homebar"></div>
+
+<!-- CHROME -->
+
+<div class="app-window" id="chromeApp">
+
+<div class="origin-header liquid">
+
+<button
+class="backBtn liquid"
+onclick="closeApp('chromeApp')">
+
+←
+
+</button>
+
+<h2>Origin Chrome</h2>
+
+</div>
+
+<div class="app-content">
+
+<div class="glass-card liquid">
+
+<h1>iQOO 15</h1>
+
+<p>
+Snapdragon 8 Elite Gen 5 flagship phone
+dengan AI frame engine dan ultra cooling.
+</p>
+
+</div>
+
+<div class="glass-card liquid">
+
+<h2>⚡ Performance</h2>
+
+<p>
+144FPS optimization • AI scheduler • ultra low latency.
+</p>
+
+</div>
+
+<div class="glass-card liquid">
+
+<h2>🔋 Battery</h2>
+
+<p>
+7000mAh battery dengan ultra fast charging.
+</p>
+
+</div>
+
+<div class="glass-card liquid">
+
+<h2>🧠 Supercomputing Chip Q3</h2>
+
+<p>
+Real-time interpolation dan image enhancement.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- MUSIC -->
+
+<div class="app-window" id="musicApp">
+
+<div class="origin-header liquid">
+
+<button
+class="backBtn liquid"
+onclick="closeApp('musicApp')">
+
+←
+
+</button>
+
+<h2>Music</h2>
+
+</div>
+
+<div class="app-content">
+
+<img
+class="album-cover"
+src="https://cdn-icons-png.freepik.com/512/8377/8377243.png">
+
+<h1 class="song-title">
+Blinding Light
+</h1>
+
+<p class="artist">
+The Weeknd
+</p>
+
+<iframe
+width="100%"
+height="220"
+src="https://www.youtube.com/embed/4NRXx6U8ABQ"
+allowfullscreen>
+</iframe>
+
+</div>
+
+</div>
+
+<!-- SETTINGS -->
+
+<div class="app-window" id="settingsApp">
+
+<div class="origin-header liquid">
+
+<button
+class="backBtn liquid"
+onclick="closeApp('settingsApp')">
+
+←
+
+</button>
+
+<h2>Settings</h2>
+
+</div>
+
+<div class="app-content">
+
+<img
+class="device-img"
+src="https://the-geek.ru/wp-content/uploads/2026/04/originos-7-1.jpg">
+
+<h1 style="text-align:center;margin-top:16px;">
+iQOO 15
+</h1>
+
+<p style="text-align:center;opacity:.6;">
+Snapdragon 8 Elite Gen 5 • 16GB RAM
+</p>
+
+<div class="origin-card liquid">
+<span>Battery</span>
+<b>7000mAh</b>
+</div>
+
+<div class="origin-card liquid">
+<span>RAM</span>
+<b>16GB</b>
+</div>
+
+<div class="origin-card liquid">
+<span>Chip</span>
+<b>Q3</b>
+</div>
+
+</div>
+
+</div>
+
+<!-- CLOCK -->
+
+<div class="app-window" id="clockApp">
+
+<div class="origin-header liquid">
+
+<button
+class="backBtn liquid"
+onclick="closeApp('clockApp')">
+
+←
+
+</button>
+
+<h2>Clock</h2>
+
+</div>
+
+<div class="app-content">
+
+<div class="glass-card liquid">
+
+<h2>🌍 World Clock</h2>
+
+<div class="origin-card liquid">
+<span>Jakarta</span>
+<b id="jakartaTime">12:00</b>
+</div>
+
+<div class="origin-card liquid">
+<span>Tokyo</span>
+<b id="tokyoTime">14:00</b>
+</div>
+
+<div class="origin-card liquid">
+<span>London</span>
+<b id="londonTime">06:00</b>
+</div>
+
+<div class="origin-card liquid">
+<span>New York</span>
+<b id="nyTime">00:00</b>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 </div>
 
 <script>
+
+/* CLOCK */
+
 function updateClock(){
-    const now = new Date();
 
-    const time =
-        now.toLocaleTimeString('id-ID',{
-            hour:'2-digit',
-            minute:'2-digit'
-        });
+const now = new Date();
 
-    const date =
-        now.toLocaleDateString('id-ID',{
-            weekday:'long',
-            day:'numeric',
-            month:'long'
-        });
+const time =
+now.toLocaleTimeString(
+'id-ID',
+{
+hour:'2-digit',
+minute:'2-digit'
+}
+);
 
-    document.getElementById('time').innerText = time;
-    document.getElementById('clockBig').innerText = time;
-    document.getElementById('dateText').innerText = date;
+const date =
+now.toLocaleDateString(
+'id-ID',
+{
+weekday:'long',
+day:'numeric',
+month:'long'
+}
+);
+
+document.getElementById('smallClock').innerText = time;
+document.getElementById('bigClock').innerText = time;
+document.getElementById('dateText').innerText = date;
+
+document.getElementById('lockTime').innerText = time;
+document.getElementById('lockDate').innerText = date;
+
 }
 
 setInterval(updateClock,1000);
 updateClock();
 
-const appWindow = document.getElementById('appWindow');
-const appTitle = document.getElementById('appTitle');
+/* LOCKSCREEN */
 
-function openApp(name){
-    appTitle.innerText = name;
-    appWindow.classList.add('active');
+const lockscreen =
+document.getElementById("lockscreen");
+
+/* DYNAMIC ISLAND */
+
+const island =
+document.getElementById("island");
+
+const statusLeft =
+document.getElementById("statusLeft");
+
+function activateIsland(){
+
+island.classList.add("active");
+statusLeft.classList.add("hide");
+
+setTimeout(()=>{
+
+island.classList.remove("active");
+statusLeft.classList.remove("hide");
+
+},1500);
+
 }
 
-function closeApp(){
-    appWindow.classList.remove('active');
+/* APP */
+
+let lastX = 0;
+let lastY = 0;
+
+function openApp(id,event){
+
+activateIsland();
+
+const app =
+document.getElementById(id);
+
+const rect =
+event.currentTarget.getBoundingClientRect();
+
+lastX =
+rect.left + rect.width/2;
+
+lastY =
+rect.top + rect.height/2;
+
+app.style.display="block";
+
+app.animate([
+
+{
+transform:
+`translate(${lastX-window.innerWidth/2}px,${lastY-window.innerHeight/2}px) scale(0.02)`,
+
+opacity:0,
+filter:"blur(30px)"
+},
+
+{
+transform:"translate(0,0) scale(1)",
+opacity:1,
+filter:"blur(0px)"
 }
+
+],{
+
+duration:750,
+easing:"cubic-bezier(.16,1,.3,1)",
+fill:"forwards"
+
+});
+
+}
+
+function closeApp(id){
+
+activateIsland();
+
+const app =
+document.getElementById(id);
+
+app.animate([
+
+{
+transform:"scale(1)",
+opacity:1
+},
+
+{
+transform:
+`translate(${lastX-window.innerWidth/2}px,${lastY-window.innerHeight/2}px) scale(0.02)`,
+
+opacity:0,
+filter:"blur(30px)"
+}
+
+],{
+
+duration:650,
+easing:"cubic-bezier(.16,1,.3,1)",
+fill:"forwards"
+
+});
+
+setTimeout(()=>{
+
+app.style.display="none";
+
+},620);
+
+}
+
+/* CONTROL CENTER */
+
+const controlCenter =
+document.getElementById("controlCenter");
+
+let ccOpen = false;
+
+function toggleCC(id){
+
+document
+.getElementById(id)
+.classList.toggle("active");
+
+}
+
+/* GESTURE */
+
+let startY = 0;
+let startX = 0;
+
+document.addEventListener(
+"touchstart",
+(e)=>{
+
+startY =
+e.touches[0].clientY;
+
+startX =
+e.touches[0].clientX;
+
+}
+);
+
+document.addEventListener(
+"touchend",
+(e)=>{
+
+let endY =
+e.changedTouches[0].clientY;
+
+let diffY =
+startY - endY;
+
+/* UNLOCK */
+
+if(
+startY > window.innerHeight - 180 &&
+diffY > 80
+){
+
+lockscreen.classList.add("hide");
+
+}
+
+/* OPEN CONTROL CENTER */
+
+if(
+startY < 35 &&
+startX > window.innerWidth - 120 &&
+diffY < -20
+){
+
+controlCenter.classList.add("show");
+ccOpen = true;
+
+}
+
+/* CLOSE CONTROL CENTER */
+
+if(
+ccOpen &&
+diffY > 60
+){
+
+controlCenter.classList.remove("show");
+ccOpen = false;
+
+}
+
+}
+);
+
+/* WORLD CLOCK */
+
+function worldClock(){
+
+function getTime(zone){
+
+return new Date()
+.toLocaleTimeString(
+'en-GB',
+{
+timeZone:zone,
+hour:'2-digit',
+minute:'2-digit'
+}
+);
+
+}
+
+document.getElementById('jakartaTime').innerText =
+getTime('Asia/Jakarta');
+
+document.getElementById('tokyoTime').innerText =
+getTime('Asia/Tokyo');
+
+document.getElementById('londonTime').innerText =
+getTime('Europe/London');
+
+document.getElementById('nyTime').innerText =
+getTime('America/New_York');
+
+}
+
+setInterval(worldClock,1000);
+worldClock();
+
 </script>
 
 </body>
