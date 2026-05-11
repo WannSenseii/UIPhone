@@ -16,7 +16,7 @@ font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
 body{
-background:#090909;
+background:#080808;
 height:100vh;
 display:flex;
 justify-content:center;
@@ -24,21 +24,18 @@ align-items:center;
 overflow:hidden;
 }
 
-/* PHONE */
-
 .phone{
 width:340px;
 height:700px;
-background:black;
+background:#000;
 border-radius:45px;
 padding:10px;
+overflow:hidden;
+position:relative;
 
 box-shadow:
 0 0 90px rgba(0,0,0,.95),
 inset 0 0 0 2px rgba(255,255,255,.03);
-
-position:relative;
-overflow:hidden;
 }
 
 .screen{
@@ -55,44 +52,38 @@ background-size:cover;
 background-position:center;
 }
 
-/* LIQUID GLASS */
+/* GLASS */
 
 .liquid{
 background:
 linear-gradient(
 145deg,
-rgba(255,255,255,.23),
+rgba(255,255,255,.22),
 rgba(255,255,255,.05)
 );
 
 border:
-1px solid rgba(255,255,255,.14);
+1px solid rgba(255,255,255,.12);
 
 backdrop-filter:
-blur(42px)
+blur(40px)
 saturate(180%);
 
 -webkit-backdrop-filter:
-blur(42px)
+blur(40px)
 saturate(180%);
 
 box-shadow:
-0 10px 35px rgba(0,0,0,.18),
+0 10px 40px rgba(0,0,0,.2),
 inset 0 1px 1px rgba(255,255,255,.08);
 }
 
-/* LOCKSCREEN */
+/* LOCK */
 
 .lockscreen{
 position:absolute;
 inset:0;
 z-index:999999;
-
-background:
-url('https://www.iclarified.com/images/news/98545/469059/469059-640.avif');
-
-background-size:cover;
-background-position:center;
 
 display:flex;
 flex-direction:column;
@@ -100,6 +91,12 @@ justify-content:center;
 align-items:center;
 
 color:white;
+
+background:
+url('https://www.iclarified.com/images/news/98545/469059/469059-640.avif');
+
+background-size:cover;
+background-position:center;
 
 transition:
 1s cubic-bezier(.16,1,.3,1);
@@ -124,10 +121,7 @@ opacity:.9;
 .unlock-text{
 position:absolute;
 bottom:55px;
-
-font-size:15px;
 opacity:.8;
-
 animation:float 2s infinite ease-in-out;
 }
 
@@ -149,25 +143,23 @@ transform:translateX(-50%);
 width:126px;
 height:34px;
 
-background:
-rgba(0,0,0,.95);
+background:#000;
 
 border-radius:40px;
 
-z-index:99999;
+z-index:9999;
 
 transition:
-width .6s cubic-bezier(.16,1,.3,1);
+all .6s cubic-bezier(.16,1,.3,1);
 }
 
 .dynamic-island.active{
-width:240px;
+width:230px;
 }
 
 /* STATUS */
 
 .statusbar{
-width:100%;
 padding:18px 24px;
 
 display:flex;
@@ -175,12 +167,8 @@ justify-content:space-between;
 align-items:center;
 
 color:white;
-
 font-size:14px;
 font-weight:600;
-
-position:relative;
-z-index:9999;
 }
 
 .status-left{
@@ -194,7 +182,7 @@ transform:translateX(-120px);
 opacity:0;
 }
 
-/* MAIN CLOCK */
+/* MAIN */
 
 .clock{
 margin-top:60px;
@@ -206,12 +194,6 @@ color:white;
 font-size:72px;
 font-weight:500;
 }
-
-.clock p{
-font-size:18px;
-}
-
-/* APPS */
 
 .apps{
 position:absolute;
@@ -230,27 +212,20 @@ padding:18px;
 display:flex;
 flex-direction:column;
 align-items:center;
-
 color:white;
-
-cursor:pointer;
 }
 
 .app img{
 width:54px;
 height:54px;
-
 border-radius:16px;
-
 object-fit:cover;
-
 margin-bottom:6px;
-
 transition:.2s;
 }
 
 .app img:active{
-transform:scale(.82);
+transform:scale(.8);
 }
 
 .app span{
@@ -261,7 +236,6 @@ font-size:12px;
 
 .dock{
 position:absolute;
-
 bottom:18px;
 left:50%;
 
@@ -269,14 +243,11 @@ transform:translateX(-50%);
 
 width:90%;
 height:72px;
-
 border-radius:30px;
 }
 
 .dock-inner{
-width:100%;
 height:100%;
-
 display:flex;
 justify-content:space-around;
 align-items:center;
@@ -285,23 +256,19 @@ align-items:center;
 .dock img{
 width:50px;
 height:50px;
-
 border-radius:16px;
 }
 
 .homebar{
 width:120px;
 height:5px;
-
 background:white;
 
 border-radius:50px;
 
 position:absolute;
-
 bottom:5px;
 left:50%;
-
 transform:translateX(-50%);
 }
 
@@ -338,9 +305,7 @@ scale(1);
 .cc-panel{
 width:100%;
 height:100%;
-
 border-radius:40px;
-
 padding:22px;
 }
 
@@ -360,11 +325,8 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 
-color:white;
-
 font-size:30px;
-
-cursor:pointer;
+color:white;
 
 transition:.25s;
 }
@@ -378,49 +340,7 @@ rgba(0,210,255,.82)
 );
 }
 
-.cc-toggle span{
-font-size:14px;
-margin-top:8px;
-}
-
-.cc-slider{
-margin-top:18px;
-
-padding:22px;
-
-border-radius:28px;
-
-color:white;
-}
-
-.cc-slider input{
-width:100%;
-margin-top:14px;
-}
-
-.cc-music{
-margin-top:18px;
-
-display:flex;
-align-items:center;
-
-gap:14px;
-
-padding:18px;
-
-border-radius:28px;
-
-color:white;
-}
-
-.cc-music img{
-width:72px;
-height:72px;
-
-border-radius:22px;
-}
-
-/* APP WINDOWS */
+/* APP WINDOW */
 
 .app-window{
 position:absolute;
@@ -435,7 +355,6 @@ to bottom,
 
 display:none;
 overflow:auto;
-
 z-index:999;
 
 transform-origin:center center;
@@ -450,52 +369,25 @@ padding:65px 20px 20px;
 
 display:flex;
 align-items:center;
-
 gap:15px;
-
 z-index:99;
 }
 
 .backBtn{
 width:42px;
 height:42px;
-
 border:none;
-
 border-radius:50%;
-
 font-size:20px;
-
-cursor:pointer;
 }
 
 .app-content{
 padding:20px;
 }
 
-.glass-card{
-padding:24px;
-
-border-radius:34px;
-
-margin-bottom:20px;
-}
-
-.origin-card{
-padding:18px 22px;
-
-border-radius:24px;
-
-margin-top:15px;
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
 .album-cover{
-width:220px;
-height:220px;
+width:240px;
+height:240px;
 
 border-radius:32px;
 
@@ -503,31 +395,58 @@ object-fit:cover;
 
 display:block;
 margin:auto;
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.25);
 }
 
 .song-title{
 text-align:center;
-margin-top:20px;
+margin-top:25px;
 font-size:32px;
+font-weight:700;
 }
 
 .artist{
 text-align:center;
 opacity:.6;
-margin-bottom:20px;
+margin-top:5px;
+margin-bottom:25px;
 }
 
-.device-img{
-width:100%;
-height:220px;
+/* PLAYER */
 
-border-radius:30px;
+.player-controls{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:30px;
 
-object-fit:cover;
+margin-top:30px;
+}
+
+.player-btn{
+width:70px;
+height:70px;
+
+border:none;
+border-radius:50%;
+
+font-size:26px;
+color:white;
+
+cursor:pointer;
+}
+
+.play-btn{
+width:86px;
+height:86px;
+font-size:32px;
 }
 
 iframe{
-border-radius:24px;
+margin-top:28px;
+border-radius:28px;
 }
 
 </style>
@@ -539,8 +458,6 @@ border-radius:24px;
 
 <div class="screen">
 
-<!-- LOCKSCREEN -->
-
 <div class="lockscreen" id="lockscreen">
 
 <div class="lock-time" id="lockTime">
@@ -548,7 +465,7 @@ border-radius:24px;
 </div>
 
 <div class="lock-date" id="lockDate">
-Monday, May 11
+Monday
 </div>
 
 <div class="unlock-text">
@@ -557,11 +474,7 @@ Swipe up to unlock
 
 </div>
 
-<!-- DYNAMIC ISLAND -->
-
 <div class="dynamic-island" id="island"></div>
-
-<!-- STATUS -->
 
 <div class="statusbar">
 
@@ -575,85 +488,6 @@ Swipe up to unlock
 
 </div>
 
-<!-- CONTROL CENTER -->
-
-<div class="control-center" id="controlCenter">
-
-<div class="cc-panel liquid">
-
-<h2 style="color:white;margin-bottom:20px;">
-Control Center
-</h2>
-
-<div class="cc-grid">
-
-<div
-class="cc-toggle liquid active"
-id="wifiBtn"
-onclick="toggleCC('wifiBtn')">
-
-📶
-<span>Wi-Fi</span>
-
-</div>
-
-<div
-class="cc-toggle liquid active"
-id="dataBtn"
-onclick="toggleCC('dataBtn')">
-
-🛜
-<span>Data</span>
-
-</div>
-
-<div class="cc-toggle liquid">
-🎧
-<span>Bluetooth</span>
-</div>
-
-<div class="cc-toggle liquid">
-🌙
-<span>Focus</span>
-</div>
-
-</div>
-
-<div class="cc-slider liquid">
-
-<p>Brightness</p>
-
-<input type="range" value="75">
-
-</div>
-
-<div class="cc-slider liquid">
-
-<p>Volume</p>
-
-<input type="range" value="55">
-
-</div>
-
-<div class="cc-music liquid">
-
-<img src="https://cdn-icons-png.freepik.com/512/8377/8377243.png">
-
-<div>
-
-<h3>Blinding Light</h3>
-<p>The Weeknd</p>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- CLOCK -->
-
 <div class="clock">
 
 <h1 id="bigClock">
@@ -661,28 +495,14 @@ onclick="toggleCC('dataBtn')">
 </h1>
 
 <p id="dateText">
-Monday, May 11
+Monday
 </p>
 
 </div>
 
-<!-- APPS -->
-
 <div class="apps">
 
-<div
-class="app"
-onclick="openApp('chromeApp',event)">
-
-<img src="https://play-lh.googleusercontent.com/MGwlmZ9iUgnJQKGCWdstBDltLDJEgAJUB-2NKaoLJeCz_V1U2R22P8BFHsJjeJDasIw=w240-h480-rw">
-
-<span>Chrome</span>
-
-</div>
-
-<div
-class="app"
-onclick="openApp('musicApp',event)">
+<div class="app" onclick="openApp('musicApp',event)">
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/3840px-Spotify_logo_without_text.svg.png">
 
@@ -690,110 +510,19 @@ onclick="openApp('musicApp',event)">
 
 </div>
 
-<div
-class="app"
-onclick="openApp('settingsApp',event)">
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Settings_%28iOS%29.png">
-
-<span>Settings</span>
-
 </div>
-
-<div
-class="app"
-onclick="openApp('clockApp',event)">
-
-<img src="https://www.macworld.com/wp-content/uploads/2025/02/mac911-alarm-clock-icon.png">
-
-<span>Clock</span>
-
-</div>
-
-</div>
-
-<!-- DOCK -->
 
 <div class="dock liquid">
 
 <div class="dock-inner">
 
-<img src="https://play-lh.googleusercontent.com/MGwlmZ9iUgnJQKGCWdstBDltLDJEgAJUB-2NKaoLJeCz_V1U2R22P8BFHsJjeJDasIw=w240-h480-rw">
-
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/3840px-Spotify_logo_without_text.svg.png">
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Settings_%28iOS%29.png">
 
 </div>
 
 </div>
 
 <div class="homebar"></div>
-
-<!-- CHROME -->
-
-<div class="app-window" id="chromeApp">
-
-<div class="origin-header liquid">
-
-<button
-class="backBtn liquid"
-onclick="closeApp('chromeApp')">
-
-←
-
-</button>
-
-<h2>Origin Chrome</h2>
-
-</div>
-
-<div class="app-content">
-
-<div class="glass-card liquid">
-
-<h1>iQOO 15</h1>
-
-<p>
-Snapdragon 8 Elite Gen 5 flagship phone
-dengan AI frame engine dan ultra cooling.
-</p>
-
-</div>
-
-<div class="glass-card liquid">
-
-<h2>⚡ Performance</h2>
-
-<p>
-144FPS optimization • AI scheduler • ultra low latency.
-</p>
-
-</div>
-
-<div class="glass-card liquid">
-
-<h2>🔋 Battery</h2>
-
-<p>
-7000mAh battery dengan ultra fast charging.
-</p>
-
-</div>
-
-<div class="glass-card liquid">
-
-<h2>🧠 Supercomputing Chip Q3</h2>
-
-<p>
-Real-time interpolation dan image enhancement.
-</p>
-
-</div>
-
-</div>
-
-</div>
 
 <!-- MUSIC -->
 
@@ -817,123 +546,62 @@ onclick="closeApp('musicApp')">
 
 <img
 class="album-cover"
-src="https://cdn-icons-png.freepik.com/512/8377/8377243.png">
+id="albumCover"
+src="https://i.ytimg.com/vi/4NRXx6U8ABQ/maxresdefault.jpg">
 
-<h1 class="song-title">
-Blinding Light
+<h1
+class="song-title"
+id="songTitle">
+
+Blinding Lights
+
 </h1>
 
-<p class="artist">
+<p
+class="artist"
+id="artistName">
+
 The Weeknd
+
 </p>
+
+<div class="player-controls">
+
+<button
+class="player-btn liquid"
+onclick="prevSong()">
+
+⏮
+
+</button>
+
+<button
+class="player-btn play-btn liquid"
+onclick="togglePlay()"
+id="playBtn">
+
+▶
+
+</button>
+
+<button
+class="player-btn liquid"
+onclick="nextSong()">
+
+⏭
+
+</button>
+
+</div>
 
 <iframe
+id="ytplayer"
 width="100%"
-height="220"
-src="https://www.youtube.com/embed/4NRXx6U8ABQ"
+height="230"
+src="https://www.youtube.com/embed/4NRXx6U8ABQ?enablejsapi=1"
 allowfullscreen>
+
 </iframe>
-
-</div>
-
-</div>
-
-<!-- SETTINGS -->
-
-<div class="app-window" id="settingsApp">
-
-<div class="origin-header liquid">
-
-<button
-class="backBtn liquid"
-onclick="closeApp('settingsApp')">
-
-←
-
-</button>
-
-<h2>Settings</h2>
-
-</div>
-
-<div class="app-content">
-
-<img
-class="device-img"
-src="https://the-geek.ru/wp-content/uploads/2026/04/originos-7-1.jpg">
-
-<h1 style="text-align:center;margin-top:16px;">
-iQOO 15
-</h1>
-
-<p style="text-align:center;opacity:.6;">
-Snapdragon 8 Elite Gen 5 • 16GB RAM
-</p>
-
-<div class="origin-card liquid">
-<span>Battery</span>
-<b>7000mAh</b>
-</div>
-
-<div class="origin-card liquid">
-<span>RAM</span>
-<b>16GB</b>
-</div>
-
-<div class="origin-card liquid">
-<span>Chip</span>
-<b>Q3</b>
-</div>
-
-</div>
-
-</div>
-
-<!-- CLOCK -->
-
-<div class="app-window" id="clockApp">
-
-<div class="origin-header liquid">
-
-<button
-class="backBtn liquid"
-onclick="closeApp('clockApp')">
-
-←
-
-</button>
-
-<h2>Clock</h2>
-
-</div>
-
-<div class="app-content">
-
-<div class="glass-card liquid">
-
-<h2>🌍 World Clock</h2>
-
-<div class="origin-card liquid">
-<span>Jakarta</span>
-<b id="jakartaTime">12:00</b>
-</div>
-
-<div class="origin-card liquid">
-<span>Tokyo</span>
-<b id="tokyoTime">14:00</b>
-</div>
-
-<div class="origin-card liquid">
-<span>London</span>
-<b id="londonTime">06:00</b>
-</div>
-
-<div class="origin-card liquid">
-<span>New York</span>
-<b id="nyTime">00:00</b>
-</div>
-
-</div>
 
 </div>
 
@@ -1004,7 +672,7 @@ setTimeout(()=>{
 island.classList.remove("active");
 statusLeft.classList.remove("hide");
 
-},1500);
+},1400);
 
 }
 
@@ -1040,11 +708,11 @@ app.animate([
 transform:
 `
 translate(${x}px,${y}px)
-scale(0.08)
+scale(0.06)
 `,
 borderRadius:"120px",
-opacity:0.3,
-filter:"blur(25px)"
+opacity:0.2,
+filter:"blur(30px)"
 },
 
 {
@@ -1057,7 +725,7 @@ filter:"blur(0px)"
 
 ],{
 
-duration:700,
+duration:760,
 
 easing:
 "cubic-bezier(.16,1,.3,1)",
@@ -1103,13 +771,13 @@ translate(${x}px,${y}px)
 scale(0.05)
 `,
 borderRadius:"120px",
-opacity:0.2,
-filter:"blur(35px)"
+opacity:0,
+filter:"blur(40px)"
 }
 
 ],{
 
-duration:650,
+duration:680,
 
 easing:
 "cubic-bezier(.32,.72,0,1)",
@@ -1122,26 +790,11 @@ setTimeout(()=>{
 
 app.style.display = "none";
 
-},620);
+},650);
 
 }
 
-/* CONTROL CENTER */
-
-const controlCenter =
-document.getElementById("controlCenter");
-
-let ccOpen = false;
-
-function toggleCC(id){
-
-document
-.getElementById(id)
-.classList.toggle("active");
-
-}
-
-/* GESTURE FIX */
+/* GESTURE */
 
 const phone =
 document.querySelector(".phone");
@@ -1169,9 +822,6 @@ phone.addEventListener(
 let endY =
 e.changedTouches[0].clientY;
 
-let endX =
-e.changedTouches[0].clientX;
-
 let diffY =
 startY - endY;
 
@@ -1186,70 +836,118 @@ lockscreen.classList.add("hide");
 
 }
 
-/* OPEN CONTROL CENTER */
-
-if(
-startY < 60 &&
-startX > window.innerWidth - 120 &&
-diffY < -30
-){
-
-controlCenter.classList.add("show");
-
-ccOpen = true;
-
-}
-
-/* CLOSE CONTROL CENTER */
-
-if(
-ccOpen &&
-diffY > 60
-){
-
-controlCenter.classList.remove("show");
-
-ccOpen = false;
-
-}
-
 }
 );
 
-/* WORLD CLOCK */
+/* MUSIC */
 
-function worldClock(){
+const songs = [
 
-function getTime(zone){
-
-return new Date()
-.toLocaleTimeString(
-'en-GB',
 {
-timeZone:zone,
-hour:'2-digit',
-minute:'2-digit'
-}
-);
+title:"Blinding Lights",
+artist:"The Weeknd",
+thumb:"https://i.ytimg.com/vi/4NRXx6U8ABQ/maxresdefault.jpg",
+video:"4NRXx6U8ABQ"
+},
 
-}
+{
+title:"Starboy",
+artist:"The Weeknd",
+thumb:"https://i.ytimg.com/vi/34Na4j8AVgA/maxresdefault.jpg",
+video:"34Na4j8AVgA"
+},
 
-document.getElementById('jakartaTime').innerText =
-getTime('Asia/Jakarta');
-
-document.getElementById('tokyoTime').innerText =
-getTime('Asia/Tokyo');
-
-document.getElementById('londonTime').innerText =
-getTime('Europe/London');
-
-document.getElementById('nyTime').innerText =
-getTime('America/New_York');
-
+{
+title:"After Hours",
+artist:"The Weeknd",
+thumb:"https://i.ytimg.com/vi/ygTZZpVkmKg/maxresdefault.jpg",
+video:"ygTZZpVkmKg"
 }
 
-setInterval(worldClock,1000);
-worldClock();
+];
+
+let currentSong = 0;
+let playing = false;
+
+function loadSong(index){
+
+document.getElementById("albumCover").src =
+songs[index].thumb;
+
+document.getElementById("songTitle").innerText =
+songs[index].title;
+
+document.getElementById("artistName").innerText =
+songs[index].artist;
+
+document.getElementById("ytplayer").src =
+`https://www.youtube.com/embed/${songs[index].video}?autoplay=1`;
+
+playing = true;
+
+document.getElementById("playBtn").innerText =
+"⏸";
+
+}
+
+function nextSong(){
+
+currentSong++;
+
+if(currentSong >= songs.length){
+
+currentSong = 0;
+
+}
+
+loadSong(currentSong);
+
+}
+
+function prevSong(){
+
+currentSong--;
+
+if(currentSong < 0){
+
+currentSong =
+songs.length - 1;
+
+}
+
+loadSong(currentSong);
+
+}
+
+function togglePlay(){
+
+const player =
+document.getElementById("ytplayer");
+
+const btn =
+document.getElementById("playBtn");
+
+if(playing){
+
+player.src =
+player.src.replace("&autoplay=1","");
+
+btn.innerText = "▶";
+
+playing = false;
+
+}else{
+
+player.src =
+`https://www.youtube.com/embed/${songs[currentSong].video}?autoplay=1`;
+
+btn.innerText = "⏸";
+
+playing = true;
+
+}
+
+}
 
 </script>
 
