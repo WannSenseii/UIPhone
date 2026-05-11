@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OriginOS Virtual Phone</title>
 
 <style>
@@ -12,10 +12,11 @@ margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+-webkit-tap-highlight-color:transparent;
 }
 
 body{
-background:#0a0a0a;
+background:#090909;
 height:100vh;
 display:flex;
 justify-content:center;
@@ -28,7 +29,7 @@ overflow:hidden;
 .phone{
 width:340px;
 height:700px;
-background:#000;
+background:black;
 border-radius:45px;
 padding:10px;
 
@@ -37,6 +38,7 @@ box-shadow:
 inset 0 0 0 2px rgba(255,255,255,.03);
 
 position:relative;
+overflow:hidden;
 }
 
 .screen{
@@ -67,11 +69,11 @@ border:
 1px solid rgba(255,255,255,.14);
 
 backdrop-filter:
-blur(40px)
+blur(42px)
 saturate(180%);
 
 -webkit-backdrop-filter:
-blur(40px)
+blur(42px)
 saturate(180%);
 
 box-shadow:
@@ -124,14 +126,14 @@ position:absolute;
 bottom:55px;
 
 font-size:15px;
-opacity:.85;
+opacity:.8;
 
 animation:float 2s infinite ease-in-out;
 }
 
 @keyframes float{
 0%{transform:translateY(0)}
-50%{transform:translateY(-7px)}
+50%{transform:translateY(-8px)}
 100%{transform:translateY(0)}
 }
 
@@ -141,12 +143,14 @@ animation:float 2s infinite ease-in-out;
 position:absolute;
 top:10px;
 left:50%;
+
 transform:translateX(-50%);
 
 width:126px;
 height:34px;
 
-background:rgba(0,0,0,.95);
+background:
+rgba(0,0,0,.95);
 
 border-radius:40px;
 
@@ -160,11 +164,10 @@ width .6s cubic-bezier(.16,1,.3,1);
 width:240px;
 }
 
-/* STATUS BAR */
+/* STATUS */
 
 .statusbar{
 width:100%;
-
 padding:18px 24px;
 
 display:flex;
@@ -229,6 +232,7 @@ flex-direction:column;
 align-items:center;
 
 color:white;
+
 cursor:pointer;
 }
 
@@ -246,7 +250,7 @@ transition:.2s;
 }
 
 .app img:active{
-transform:scale(.84);
+transform:scale(.82);
 }
 
 .app span{
@@ -281,6 +285,7 @@ align-items:center;
 .dock img{
 width:50px;
 height:50px;
+
 border-radius:16px;
 }
 
@@ -415,7 +420,7 @@ height:72px;
 border-radius:22px;
 }
 
-/* APP WINDOW */
+/* APP WINDOWS */
 
 .app-window{
 position:absolute;
@@ -424,7 +429,7 @@ inset:0;
 background:
 linear-gradient(
 to bottom,
-#eef3ff,
+#edf3ff,
 #eef2ff
 );
 
@@ -432,6 +437,9 @@ display:none;
 overflow:auto;
 
 z-index:999;
+
+transform-origin:center center;
+will-change:transform,opacity;
 }
 
 .origin-header{
@@ -522,44 +530,6 @@ iframe{
 border-radius:24px;
 }
 
-/* TIMER */
-
-.timerBtn{
-flex:1;
-
-height:54px;
-
-border:none;
-
-border-radius:22px;
-
-color:white;
-
-cursor:pointer;
-
-background:
-linear-gradient(
-135deg,
-rgba(0,145,255,.95),
-rgba(130,90,255,.9)
-);
-}
-
-.time-input{
-width:100%;
-height:55px;
-
-border:none;
-
-border-radius:22px;
-
-padding:0 18px;
-
-margin-top:18px;
-
-font-size:16px;
-}
-
 </style>
 </head>
 
@@ -591,7 +561,7 @@ Swipe up to unlock
 
 <div class="dynamic-island" id="island"></div>
 
-<!-- STATUS BAR -->
+<!-- STATUS -->
 
 <div class="statusbar">
 
@@ -670,8 +640,10 @@ onclick="toggleCC('dataBtn')">
 <img src="https://cdn-icons-png.freepik.com/512/8377/8377243.png">
 
 <div>
+
 <h3>Blinding Light</h3>
 <p>The Weeknd</p>
+
 </div>
 
 </div>
@@ -698,7 +670,9 @@ Monday, May 11
 
 <div class="apps">
 
-<div class="app" onclick="openApp('chromeApp',event)">
+<div
+class="app"
+onclick="openApp('chromeApp',event)">
 
 <img src="https://play-lh.googleusercontent.com/MGwlmZ9iUgnJQKGCWdstBDltLDJEgAJUB-2NKaoLJeCz_V1U2R22P8BFHsJjeJDasIw=w240-h480-rw">
 
@@ -706,7 +680,9 @@ Monday, May 11
 
 </div>
 
-<div class="app" onclick="openApp('musicApp',event)">
+<div
+class="app"
+onclick="openApp('musicApp',event)">
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/3840px-Spotify_logo_without_text.svg.png">
 
@@ -714,7 +690,9 @@ Monday, May 11
 
 </div>
 
-<div class="app" onclick="openApp('settingsApp',event)">
+<div
+class="app"
+onclick="openApp('settingsApp',event)">
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Settings_%28iOS%29.png">
 
@@ -722,7 +700,9 @@ Monday, May 11
 
 </div>
 
-<div class="app" onclick="openApp('clockApp',event)">
+<div
+class="app"
+onclick="openApp('clockApp',event)">
 
 <img src="https://www.macworld.com/wp-content/uploads/2025/02/mac911-alarm-clock-icon.png">
 
@@ -1028,49 +1008,60 @@ statusLeft.classList.remove("hide");
 
 }
 
-/* APP */
+/* APP ANIMATION */
 
-let lastX = 0;
-let lastY = 0;
+let currentIcon = null;
 
 function openApp(id,event){
 
 activateIsland();
 
+currentIcon = event.currentTarget;
+
 const app =
 document.getElementById(id);
 
 const rect =
-event.currentTarget.getBoundingClientRect();
+currentIcon.getBoundingClientRect();
 
-lastX =
-rect.left + rect.width/2;
+const x =
+(rect.left + rect.width/2) -
+(window.innerWidth/2);
 
-lastY =
-rect.top + rect.height/2;
+const y =
+(rect.top + rect.height/2) -
+(window.innerHeight/2);
 
-app.style.display="block";
+app.style.display = "block";
 
 app.animate([
 
 {
 transform:
-`translate(${lastX-window.innerWidth/2}px,${lastY-window.innerHeight/2}px) scale(0.02)`,
-
-opacity:0,
-filter:"blur(30px)"
+`
+translate(${x}px,${y}px)
+scale(0.08)
+`,
+borderRadius:"120px",
+opacity:0.3,
+filter:"blur(25px)"
 },
 
 {
-transform:"translate(0,0) scale(1)",
+transform:
+"translate(0px,0px) scale(1)",
+borderRadius:"0px",
 opacity:1,
 filter:"blur(0px)"
 }
 
 ],{
 
-duration:750,
-easing:"cubic-bezier(.16,1,.3,1)",
+duration:700,
+
+easing:
+"cubic-bezier(.16,1,.3,1)",
+
 fill:"forwards"
 
 });
@@ -1084,32 +1075,52 @@ activateIsland();
 const app =
 document.getElementById(id);
 
+const rect =
+currentIcon.getBoundingClientRect();
+
+const x =
+(rect.left + rect.width/2) -
+(window.innerWidth/2);
+
+const y =
+(rect.top + rect.height/2) -
+(window.innerHeight/2);
+
 app.animate([
 
 {
-transform:"scale(1)",
-opacity:1
+transform:
+"translate(0px,0px) scale(1)",
+borderRadius:"0px",
+opacity:1,
+filter:"blur(0px)"
 },
 
 {
 transform:
-`translate(${lastX-window.innerWidth/2}px,${lastY-window.innerHeight/2}px) scale(0.02)`,
-
-opacity:0,
-filter:"blur(30px)"
+`
+translate(${x}px,${y}px)
+scale(0.05)
+`,
+borderRadius:"120px",
+opacity:0.2,
+filter:"blur(35px)"
 }
 
 ],{
 
 duration:650,
-easing:"cubic-bezier(.16,1,.3,1)",
+
+easing:
+"cubic-bezier(.32,.72,0,1)",
+
 fill:"forwards"
 
 });
 
 setTimeout(()=>{
 
-app.style.display="none";
+app.style.display = "none";
 
 },620);
 
@@ -1130,12 +1141,15 @@ document
 
 }
 
-/* GESTURE */
+/* GESTURE FIX */
+
+const phone =
+document.querySelector(".phone");
 
 let startY = 0;
 let startX = 0;
 
-document.addEventListener(
+phone.addEventListener(
 "touchstart",
 (e)=>{
 
@@ -1148,12 +1162,15 @@ e.touches[0].clientX;
 }
 );
 
-document.addEventListener(
+phone.addEventListener(
 "touchend",
 (e)=>{
 
 let endY =
 e.changedTouches[0].clientY;
+
+let endX =
+e.changedTouches[0].clientX;
 
 let diffY =
 startY - endY;
@@ -1172,12 +1189,13 @@ lockscreen.classList.add("hide");
 /* OPEN CONTROL CENTER */
 
 if(
-startY < 35 &&
+startY < 60 &&
 startX > window.innerWidth - 120 &&
-diffY < -20
+diffY < -30
 ){
 
 controlCenter.classList.add("show");
+
 ccOpen = true;
 
 }
@@ -1190,6 +1208,7 @@ diffY > 60
 ){
 
 controlCenter.classList.remove("show");
+
 ccOpen = false;
 
 }
