@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OriginOS Virtual Phone</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+background:#080808;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+.phone{
+width:340px;
+height:700px;
+background:#000;
+border-radius:45px;
+padding:10px;
+overflow:hidden;
+position:relative;
+
+box-shadow:
+0 0 90px rgba(0,0,0,.95),
+inset 0 0 0 2px rgba(255,255,255,.03);
+}
+
+.screen{
+width:100%;
+height:100%;
+border-radius:35px;
+overflow:hidden;
+position:relative;
+
+background:
+url('https://www.iclarified.com/images/news/98545/469059/469059-640.avif');
+
+background-size:cover;
+background-position:center;
+}
+
+/* GLASS */
+
+.liquid{
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.22),
+rgba(255,255,255,.05)
+);
+
+border:
+1px solid rgba(255,255,255,.12);
+
+backdrop-filter:
+blur(40px)
+saturate(180%);
+
+-webkit-backdrop-filter:
+blur(40px)
+saturate(180%);
+
+box-shadow:
+0 10px 40px rgba(0,0,0,.2),
+inset 0 1px 1px rgba(255,255,255,.08);
+}
+
+/* LOCK */
+
+.lockscreen{
+position:absolute;
+inset:0;
+z-index:999999;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+color:white;
+
+background:
+url('https://www.iclarified.com/images/news/98545/469059/469059-640.avif');
+
+background-size:cover;
+background-position:center;
+
+transition:
+1s cubic-bezier(.16,1,.3,1);
+}
+
+.lockscreen.hide{
+transform:translateY(-100%);
+opacity:0;
+pointer-events:none;
+}
+
+.lock-time{
+font-size:84px;
+font-weight:500;
+}
+
+.lock-date{
+font-size:18px;
+opacity:.9;
+}
+
+.unlock-text{
+position:absolute;
+bottom:55px;
+opacity:.8;
+animation:float 2s infinite ease-in-out;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-8px)}
+100%{transform:translateY(0)}
+}
+
+/* DYNAMIC ISLAND */
+
+.dynamic-island{
+position:absolute;
+top:10px;
+left:50%;
+
+transform:translateX(-50%);
+
+width:126px;
+height:34px;
+
+background:#000;
+
+border-radius:40px;
+
+z-index:9999;
+
+transition:
+all .6s cubic-bezier(.16,1,.3,1);
+}
+
+.dynamic-island.active{
+width:230px;
+}
+
+/* STATUS */
+
+.statusbar{
+padding:18px 24px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+color:white;
+font-size:14px;
+font-weight:600;
+}
+
+.status-left{
+transition:
+transform .6s cubic-bezier(.16,1,.3,1),
+opacity .4s;
+}
+
+.status-left.hide{
+transform:translateX(-120px);
+opacity:0;
+}
+
+/* MAIN */
+
+.clock{
+margin-top:60px;
+text-align:center;
+color:white;
+}
+
+.clock h1{
+font-size:72px;
+font-weight:500;
+}
+
+.apps{
+position:absolute;
+bottom:110px;
+
+width:100%;
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+
+gap:18px;
+padding:18px;
+}
+
+.app{
+display:flex;
+flex-direction:column;
+align-items:center;
+color:white;
+}
+
+.app img{
+width:54px;
+height:54px;
+border-radius:16px;
+object-fit:cover;
+margin-bottom:6px;
+transition:.2s;
+}
+
+.app img:active{
+transform:scale(.8);
+}
+
+.app span{
+font-size:12px;
+}
+
+/* DOCK */
+
+.dock{
+position:absolute;
+bottom:18px;
+left:50%;
+
+transform:translateX(-50%);
+
+width:90%;
+height:72px;
+border-radius:30px;
+}
+
+.dock-inner{
+height:100%;
+display:flex;
+justify-content:space-around;
+align-items:center;
+}
+
+.dock img{
+width:50px;
+height:50px;
+border-radius:16px;
+}
+
+.homebar{
+width:120px;
+height:5px;
+background:white;
+
+border-radius:50px;
+
+position:absolute;
+bottom:5px;
+left:50%;
+transform:translateX(-50%);
+}
+
+/* CONTROL CENTER */
+
+.control-center{
+position:absolute;
+inset:0;
+
+z-index:999999;
+
+padding:82px 18px 20px;
+
+opacity:0;
+pointer-events:none;
+
+transform:
+translateY(-100px)
+scale(1.08);
+
+transition:
+.75s cubic-bezier(.16,1,.3,1);
+}
+
+.control-center.show{
+opacity:1;
+pointer-events:auto;
+
+transform:
+translateY(0)
+scale(1);
+}
+
+.cc-panel{
+width:100%;
+height:100%;
+border-radius:40px;
+padding:22px;
+}
+
+.cc-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+}
+
+.cc-toggle{
+height:100px;
+
+border-radius:28px;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+
+font-size:30px;
+color:white;
+
+transition:.25s;
+}
+
+.cc-toggle.active{
+background:
+linear-gradient(
+135deg,
+rgba(0,145,255,.95),
+rgba(0,210,255,.82)
+);
+}
+
+/* APP WINDOW */
+
+.app-window{
+position:absolute;
+inset:0;
+
+background:
+linear-gradient(
+to bottom,
+#edf3ff,
+#eef2ff
+);
+
+display:none;
+overflow:auto;
+z-index:999;
+
+transform-origin:center center;
+will-change:transform,opacity;
+}
+
+.origin-header{
+position:sticky;
+top:0;
+
+padding:65px 20px 20px;
+
+display:flex;
+align-items:center;
+gap:15px;
+z-index:99;
+}
+
+.backBtn{
+width:42px;
+height:42px;
+border:none;
+border-radius:50%;
+font-size:20px;
+}
+
+.app-content{
+padding:20px;
+}
+
+.album-cover{
+width:240px;
+height:240px;
+
+border-radius:32px;
+
+object-fit:cover;
+
+display:block;
+margin:auto;
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.25);
+}
+
+.song-title{
+text-align:center;
+margin-top:25px;
+font-size:32px;
+font-weight:700;
+}
+
+.artist{
+text-align:center;
+opacity:.6;
+margin-top:5px;
+margin-bottom:25px;
+}
+
+/* PLAYER */
+
+.player-controls{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:30px;
+
+margin-top:30px;
+}
+
+.player-btn{
+width:70px;
+height:70px;
+
+border:none;
+border-radius:50%;
+
+font-size:26px;
+color:white;
+
+cursor:pointer;
+}
+
+.play-btn{
+width:86px;
+height:86px;
+font-size:32px;
+}
+
+iframe{
+margin-top:28px;
+border-radius:28px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+<div class="screen">
+
+<div class="lockscreen" id="lockscreen">
+
+<div class="lock-time" id="lockTime">
+12:00
+</div>
+
+<div class="lock-date" id="lockDate">
+Monday
+</div>
+
+<div class="unlock-text">
+Swipe up to unlock
+</div>
+
+</div>
+
+<div class="dynamic-island" id="island"></div>
+
+<div class="statusbar">
+
+<div class="status-left" id="statusLeft">
+<span id="smallClock">12:00</span>
+</div>
+
+<div>
+📶 🔋
+</div>
+
+</div>
+
+<div class="clock">
+
+<h1 id="bigClock">
+12:00
+</h1>
+
+<p id="dateText">
+Monday
+</p>
+
+</div>
+
+<div class="apps">
+
+<div class="app" onclick="openApp('musicApp',event)">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/3840px-Spotify_logo_without_text.svg.png">
+
+<span>Music</span>
+
+</div>
+
+</div>
+
+<div class="dock liquid">
+
+<div class="dock-inner">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/3840px-Spotify_logo_without_text.svg.png">
+
+</div>
+
+</div>
+
+<div class="homebar"></div>
+
+<!-- MUSIC -->
+
+<div class="app-window" id="musicApp">
+
+<div class="origin-header liquid">
+
+<button
+class="backBtn liquid"
+onclick="closeApp('musicApp')">
+
+←
+
+</button>
+
+<h2>Music</h2>
+
+</div>
+
+<div class="app-content">
+
+<img
+class="album-cover"
+id="albumCover"
+src="https://i.ytimg.com/vi/4NRXx6U8ABQ/maxresdefault.jpg">
+
+<h1
+class="song-title"
+id="songTitle">
+
+Blinding Lights
+
+</h1>
+
+<p
+class="artist"
+id="artistName">
+
+The Weeknd
+
+</p>
+
+<div class="player-controls">
+
+<button
+class="player-btn liquid"
+onclick="prevSong()">
+
+⏮
+
+</button>
+
+<button
+class="player-btn play-btn liquid"
+onclick="togglePlay()"
+id="playBtn">
+
+▶
+
+</button>
+
+<button
+class="player-btn liquid"
+onclick="nextSong()">
+
+⏭
+
+</button>
+
+</div>
+
+<iframe
+id="ytplayer"
+width="100%"
+height="230"
+src="https://www.youtube.com/embed/4NRXx6U8ABQ?enablejsapi=1"
+allowfullscreen>
+
+</iframe>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* CLOCK */
+
+function updateClock(){
+
+const now = new Date();
+
+const time =
+now.toLocaleTimeString(
+'id-ID',
+{
+hour:'2-digit',
+minute:'2-digit'
+}
+);
+
+const date =
+now.toLocaleDateString(
+'id-ID',
+{
+weekday:'long',
+day:'numeric',
+month:'long'
+}
+);
+
+document.getElementById('smallClock').innerText = time;
+document.getElementById('bigClock').innerText = time;
+document.getElementById('dateText').innerText = date;
+
+document.getElementById('lockTime').innerText = time;
+document.getElementById('lockDate').innerText = date;
+
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* LOCKSCREEN */
+
+const lockscreen =
+document.getElementById("lockscreen");
+
+/* DYNAMIC ISLAND */
+
+const island =
+document.getElementById("island");
+
+const statusLeft =
+document.getElementById("statusLeft");
+
+function activateIsland(){
+
+island.classList.add("active");
+statusLeft.classList.add("hide");
+
+setTimeout(()=>{
+
+island.classList.remove("active");
+statusLeft.classList.remove("hide");
+
+},1400);
+
+}
+
+/* APP ANIMATION */
+
+let currentIcon = null;
+
+function openApp(id,event){
+
+activateIsland();
+
+currentIcon = event.currentTarget;
+
+const app =
+document.getElementById(id);
+
+const rect =
+currentIcon.getBoundingClientRect();
+
+const x =
+(rect.left + rect.width/2) -
+(window.innerWidth/2);
+
+const y =
+(rect.top + rect.height/2) -
+(window.innerHeight/2);
+
+app.style.display = "block";
+
+app.animate([
+
+{
+transform:
+`
+translate(${x}px,${y}px)
+scale(0.06)
+`,
+borderRadius:"120px",
+opacity:0.2,
+filter:"blur(30px)"
+},
+
+{
+transform:
+"translate(0px,0px) scale(1)",
+borderRadius:"0px",
+opacity:1,
+filter:"blur(0px)"
+}
+
+],{
+
+duration:760,
+
+easing:
+"cubic-bezier(.16,1,.3,1)",
+
+fill:"forwards"
+
+});
+
+}
+
+function closeApp(id){
+
+activateIsland();
+
+const app =
+document.getElementById(id);
+
+const rect =
+currentIcon.getBoundingClientRect();
+
+const x =
+(rect.left + rect.width/2) -
+(window.innerWidth/2);
+
+const y =
+(rect.top + rect.height/2) -
+(window.innerHeight/2);
+
+app.animate([
+
+{
+transform:
+"translate(0px,0px) scale(1)",
+borderRadius:"0px",
+opacity:1,
+filter:"blur(0px)"
+},
+
+{
+transform:
+`
+translate(${x}px,${y}px)
+scale(0.05)
+`,
+borderRadius:"120px",
+opacity:0,
+filter:"blur(40px)"
+}
+
+],{
+
+duration:680,
+
+easing:
+"cubic-bezier(.32,.72,0,1)",
+
+fill:"forwards"
+
+});
+
+setTimeout(()=>{
+
+app.style.display = "none";
+
+},650);
+
+}
+
+/* GESTURE */
+
+const phone =
+document.querySelector(".phone");
+
+let startY = 0;
+let startX = 0;
+
+phone.addEventListener(
+"touchstart",
+(e)=>{
+
+startY =
+e.touches[0].clientY;
+
+startX =
+e.touches[0].clientX;
+
+}
+);
+
+phone.addEventListener(
+"touchend",
+(e)=>{
+
+let endY =
+e.changedTouches[0].clientY;
+
+let diffY =
+startY - endY;
+
+/* UNLOCK */
+
+if(
+startY > window.innerHeight - 180 &&
+diffY > 80
+){
+
+lockscreen.classList.add("hide");
+
+}
+
+}
+);
+
+/* MUSIC */
+
+const songs = [
+
+{
+title:"Blinding Lights",
+artist:"The Weeknd",
+thumb:"https://i.ytimg.com/vi/4NRXx6U8ABQ/maxresdefault.jpg",
+video:"4NRXx6U8ABQ"
+},
+
+{
+title:"Starboy",
+artist:"The Weeknd",
+thumb:"https://i.ytimg.com/vi/34Na4j8AVgA/maxresdefault.jpg",
+video:"34Na4j8AVgA"
+},
+
+{
+title:"After Hours",
+artist:"The Weeknd",
+thumb:"https://i.ytimg.com/vi/ygTZZpVkmKg/maxresdefault.jpg",
+video:"ygTZZpVkmKg"
+}
+
+];
+
+let currentSong = 0;
+let playing = false;
+
+function loadSong(index){
+
+document.getElementById("albumCover").src =
+songs[index].thumb;
+
+document.getElementById("songTitle").innerText =
+songs[index].title;
+
+document.getElementById("artistName").innerText =
+songs[index].artist;
+
+document.getElementById("ytplayer").src =
+`https://www.youtube.com/embed/${songs[index].video}?autoplay=1`;
+
+playing = true;
+
+document.getElementById("playBtn").innerText =
+"⏸";
+
+}
+
+function nextSong(){
+
+currentSong++;
+
+if(currentSong >= songs.length){
+
+currentSong = 0;
+
+}
+
+loadSong(currentSong);
+
+}
+
+function prevSong(){
+
+currentSong--;
+
+if(currentSong < 0){
+
+currentSong =
+songs.length - 1;
+
+}
+
+loadSong(currentSong);
+
+}
+
+function togglePlay(){
+
+const player =
+document.getElementById("ytplayer");
+
+const btn =
+document.getElementById("playBtn");
+
+if(playing){
+
+player.src =
+player.src.replace("&autoplay=1","");
+
+btn.innerText = "▶";
+
+playing = false;
+
+}else{
+
+player.src =
+`https://www.youtube.com/embed/${songs[currentSong].video}?autoplay=1`;
+
+btn.innerText = "⏸";
+
+playing = true;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
